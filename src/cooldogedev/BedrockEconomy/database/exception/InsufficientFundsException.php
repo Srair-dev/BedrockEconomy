@@ -30,6 +30,6 @@ declare(strict_types=1);
 
 namespace cooldogedev\BedrockEconomy\database\exception;
 
-use cooldogedev\BedrockEconomy\libs\_eb725acc5712ec6d\cooldogedev\libSQL\exception\SQLException;
+use cooldogedev\BedrockEconomy\libs\_66fb572741843dab\cooldogedev\libSQL\exception\SQLException;
 
 final class InsufficientFundsException extends SQLException {}

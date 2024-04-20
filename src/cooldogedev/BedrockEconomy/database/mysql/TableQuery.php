@@ -31,7 +31,7 @@ declare(strict_types=1);
 namespace cooldogedev\BedrockEconomy\database\mysql;
 
 use cooldogedev\BedrockEconomy\database\helper\TableHolder;
-use cooldogedev\BedrockEconomy\libs\_eb725acc5712ec6d\cooldogedev\libSQL\query\MySQLQuery;
+use cooldogedev\BedrockEconomy\libs\_66fb572741843dab\cooldogedev\libSQL\query\MySQLQuery;
 use mysqli;
 
 final class TableQuery extends MySQLQuery

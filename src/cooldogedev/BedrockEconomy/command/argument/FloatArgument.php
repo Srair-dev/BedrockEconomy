@@ -30,7 +30,7 @@ declare(strict_types=1);
 
 namespace cooldogedev\BedrockEconomy\command\argument;
 
-use cooldogedev\BedrockEconomy\libs\_eb725acc5712ec6d\CortexPE\Commando\args\RawStringArgument;
+use cooldogedev\BedrockEconomy\libs\_66fb572741843dab\CortexPE\Commando\args\RawStringArgument;
 use pocketmine\network\mcpe\protocol\AvailableCommandsPacket;
 
 final class FloatArgument extends RawStringArgument

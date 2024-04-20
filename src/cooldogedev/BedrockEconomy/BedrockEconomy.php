@@ -44,8 +44,8 @@ use cooldogedev\BedrockEconomy\database\cache\GlobalCache;
 use cooldogedev\BedrockEconomy\database\migration\MigrationRegistry;
 use cooldogedev\BedrockEconomy\database\QueryManager;
 use cooldogedev\BedrockEconomy\language\LanguageManager;
-use cooldogedev\BedrockEconomy\libs\_eb725acc5712ec6d\cooldogedev\libSQL\ConnectionPool;
-use cooldogedev\BedrockEconomy\libs\_eb725acc5712ec6d\CortexPE\Commando\PacketHooker;
+use cooldogedev\BedrockEconomy\libs\_66fb572741843dab\cooldogedev\libSQL\ConnectionPool;
+use cooldogedev\BedrockEconomy\libs\_66fb572741843dab\CortexPE\Commando\PacketHooker;
 use JsonException;
 use pocketmine\plugin\PluginBase;
 use pocketmine\promise\Promise;
@@ -68,7 +68,7 @@ final class BedrockEconomy extends PluginBase
     /**
      * @var array<int, array{string, string}>|null
      */
-    private array $migrationInfo;
+    private ?array $migrationInfo;
 
     private bool $ready = false;
 
@@ -141,16 +141,21 @@ final class BedrockEconomy extends PluginBase
 
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
         $this->registerCommands();
-        if ($this->getConfig()->get("cache-invalidation") > 0) {
-            $this->getScheduler()->scheduleRepeatingTask(
-                task: new ClosureTask(function (): void {
-                    if ($this->ready) {
-                        GlobalCache::invalidate();
-                    }
-                }),
-                period: $this->getConfig()->getNested("cache.invalidation") * 20
-            );
+
+        if ($this->getConfig()->get("cache-invalidation") === 0) {
+            return;
         }
+
+        $this->getScheduler()->scheduleRepeatingTask(
+            task: new ClosureTask(function (): void {
+                if (!$this->ready) {
+                    return;
+                }
+
+                GlobalCache::invalidate();
+            }),
+            period: $this->getConfig()->getNested("cache.invalidation") * 20
+        );
     }
 
     private function checkConfig(): bool
@@ -167,6 +172,7 @@ final class BedrockEconomy extends PluginBase
         }
 
         $this->reloadConfig();
+
         try {
             $this->getConfig()->set("config-version", $this->getDescription()->getVersion());
             $this->getConfig()->save();
@@ -174,6 +180,7 @@ final class BedrockEconomy extends PluginBase
             $this->getLogger()->critical("An error occurred while attempting to generate the new config, " . $e->getMessage());
             return false;
         }
+
         return true;
     }
 
@@ -205,6 +212,7 @@ final class BedrockEconomy extends PluginBase
 
             $command = new $className($this, $commandData["name"], $commandData["description"], $commandData["aliases"]);
             $command->setUsage(TextFormat::colorize($commandData["usage"]));
+
             $commands[] = $command;
         }
 
